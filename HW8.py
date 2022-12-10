@@ -13,7 +13,7 @@ def get_restaurant_data(db_filename):
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
     dictlist = []
-    cur.execute("SELECT name, category, building, rating FROM restaurants JOIN categories ON restaurants.category_id = categories.id JOIN buildings ON restaurants.building_id = buildings.id")
+    cur.execute("SELECT name, building, category, rating FROM restaurants JOIN categories ON restaurants.category_id = categories.id JOIN buildings ON restaurants.building_id = buildings.id")
     rfetch = cur.fetchall()
     for i in rfetch:
         d = {}
