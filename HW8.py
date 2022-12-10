@@ -40,9 +40,9 @@ def barchart_restaurant_categories(db_filename):
     rfetch = cur.fetchall()
     datadict = {}
     for i in rfetch:
-        categorycount = i[0]
-        categoryrestauraunt = i[1]
-        datadict[categoryrestauraunt] = categorycount
+        category_count = i[0]
+        category_restauraunt = i[1]
+        datadict[category_restauraunt] = category_count
     
 
     restaurants = list(datadict.keys())
