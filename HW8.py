@@ -9,7 +9,23 @@ def get_restaurant_data(db_filename):
     dictionaries. The key:value pairs should be the name, category, building, and rating
     of each restaurant in the database.
     """
-    pass
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+db_filename)
+    cur = conn.cursor()
+    dictlist = []
+    cur.execute("SELECT name, category, building, rating FROM restaurant JOIN categories ON restaurant.category_id = categories.id JOIN buildings ON restaurants.building_id = buildings.id")
+    rfetch = cur.fetchall()
+    for i in rfetch:
+        d = {}
+        d['name'] = i[0]
+        d['building'] = i[1]
+        d['category'] = i[2]
+        d['rating'] = i[3]
+        dictlist.append(d)
+    return dictlist
+      
+    
+      
 
 def barchart_restaurant_categories(db_filename):
     """
@@ -17,7 +33,13 @@ def barchart_restaurant_categories(db_filename):
     restaurant categories and the values should be the number of restaurants in each category. The function should
     also create a bar chart with restaurant categories and the counts of each category.
     """
-    pass
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+db_filename)
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(categories.category), categories.category FROM restaurants JOIN categories ON restaurants.category_id = categories.id GROUP BY category ORDER BY rating ASC")
+    rfetch = cur.fetchall()
+    datadict = {}
+
 
 #EXTRA CREDIT
 def highest_rated_category(db_filename):#Do this through DB as well
