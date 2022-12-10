@@ -13,7 +13,7 @@ def get_restaurant_data(db_filename):
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
     dictlist = []
-    cur.execute("SELECT name, category, building, rating FROM restaurant JOIN categories ON restaurant.category_id = categories.id JOIN buildings ON restaurants.building_id = buildings.id")
+    cur.execute("SELECT name, category, building, rating FROM restaurants JOIN categories ON restaurants.category_id = categories.id JOIN buildings ON restaurants.building_id = buildings.id")
     rfetch = cur.fetchall()
     for i in rfetch:
         d = {}
@@ -36,9 +36,27 @@ def barchart_restaurant_categories(db_filename):
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(categories.category), categories.category FROM restaurants JOIN categories ON restaurants.category_id = categories.id GROUP BY category ORDER BY rating ASC")
+    cur.execute("SELECT COUNT(categories.category), categories.category FROM restaurants JOIN categories ON restaurants.category_id = categories.id GROUP BY category")
     rfetch = cur.fetchall()
     datadict = {}
+    for i in rfetch:
+        categorycount = i[0]
+        categoryrestauraunt = i[1]
+        datadict[categoryrestauraunt] = categorycount
+    
+
+    restaurants = list(datadict.keys())
+    categories = list(datadict.values())
+
+    plt.barh(restaurants, categories)
+    plt.ylabel("Restaurant Categories")
+    plt.xlabel("Number of Restaurants")
+    plt.title("Types of Restaurants on South University Ave")
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("chart.png")
+
+    return datadict
 
 
 #EXTRA CREDIT
@@ -53,7 +71,10 @@ def highest_rated_category(db_filename):#Do this through DB as well
 
 #Try calling your functions here
 def main():
-    pass
+    get_restaurant_data('South_U_Restaurants.db')
+    barchart_restaurant_categories('South_U_Restaurants.db')
+    
+
 
 class TestHW8(unittest.TestCase):
     def setUp(self):
